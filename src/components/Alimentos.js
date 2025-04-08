@@ -31,6 +31,8 @@ const Alimentos = () => {
     dispatch(addToCart(product));
   };
 
+  console.log('Rendering Alimentos component'); // Agrega esto para verificar si se renderiza
+
   return (
     <AlimentosContainer>
       <h1>Alimentos</h1>
