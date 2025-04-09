@@ -151,7 +151,7 @@ const Header = () => {
 
             <SecondaryNav>
                 <ul>
-                    <li><Link to="components/Alimentos.js">Alimentos</Link></li>
+                    <li><Link to="/alimentos">Alimentos</Link></li>
                     <li><Link to="">Premios</Link></li>
                     <li><Link to="">Accesosios</Link></li>
                     <li><Link to="">Ofertas</Link></li>
