@@ -1,39 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios'; // Importa axios
 
-// AsyncThunk para obtener productos de la API
-export const fetchProducts = createAsyncThunk(
-  'products/fetchProducts',
-  async () => {
-    const response = await fetch('https://fakestoreapi.com/products');
-    const data = await response.json();
-    return data;
-  }
-);
+// Acción asíncrona para obtener datos de la API
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
+  const response = await fetch('https://fakestoreapi.com/products'); // Actualiza con tu API si es diferente
+  return await response.json();
+});
 
-// Slice para manejar el estado de los productos
 const productsSlice = createSlice({
   name: 'products',
-  initialState: {
-    items: [], // Lista de productos
-    status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
-    error: null, // Mensaje de error
-  },
-  reducers: {}, // Acciones adicionales si las necesitas
+  initialState: [], // Estado inicial vacío
+  reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchProducts.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.items = action.payload;
-      })
-      .addCase(fetchProducts.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      });
+    builder.addCase(fetchProducts.fulfilled, (state, action) => {
+      return action.payload; // Actualiza el estado con los datos obtenidos
+    });
   },
 });
 
-// Exportar el reducer para integrarlo en el store
 export default productsSlice.reducer;

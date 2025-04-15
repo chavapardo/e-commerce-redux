@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { addToCart } from '../redux/actions';
+import { fetchProducts } from '../features/products/productsSlice';
+import { addToCart } from '../features/cart/cartSlice';
 
 const AlimentosContainer = styled.main`
   display: flex;
@@ -13,10 +14,10 @@ const AlimentosContainer = styled.main`
 
 const ProductGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Tres columnas */
-  gap: 20px; /* Espacio entre elementos */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
   width: 100%;
-  max-width: 1200px; /* Ancho máximo de la cuadrícula */
+  max-width: 1200px;
 `;
 
 const ProductCard = styled.div`
@@ -32,7 +33,7 @@ const ProductCard = styled.div`
 
 const ProductImage = styled.img`
   width: 100%;
-  max-width: 150px; /* Tamaño máximo de la imagen */
+  max-width: 150px;
   height: auto;
   border-radius: 8px;
   margin-bottom: 10px;
@@ -67,18 +68,31 @@ const Alimentos = () => {
   const products = useSelector((state) => state.products);
   const dispatch = useDispatch();
 
+  // Cargar productos al montar el componente
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
   const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
+    dispatch(addToCart({
+      id: product.id,           // ID del producto
+      title: product.title,     // Título del producto
+      price: product.price,     // Precio del producto
+      image: product.image,     // URL de la imagen
+    }));
   };
+
+  if (!Array.isArray(products) || products.length === 0) {
+    return <p>No hay productos disponibles o están cargando...</p>;
+  }
 
   return (
     <AlimentosContainer>
-      <h1>Alimentos</h1>
       <ProductGrid>
         {products.map((product) => (
           <ProductCard key={product.id}>
-            <ProductImage src={product.image} alt={product.name} /> {/* Mostrar la imagen */}
-            <ProductName>{product.name}</ProductName>
+            <ProductImage src={product.image} alt={product.title} />
+            <ProductName>{product.title}</ProductName>
             <ProductPrice>${product.price}</ProductPrice>
             <AddToCartButton onClick={() => handleAddToCart(product)}>
               Agregar al Carrito
@@ -87,7 +101,7 @@ const Alimentos = () => {
         ))}
       </ProductGrid>
     </AlimentosContainer>
-  );  
+  );
 };
 
 export default Alimentos;

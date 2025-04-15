@@ -2,36 +2,30 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart } from '../redux/actions';
+import { removeFromCart } from '../features/cart/cartSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, } from '@fortawesome/free-solid-svg-icons'; // Importa el ícono correcto
+import { faSearch } from '@fortawesome/free-solid-svg-icons'; // Importa el ícono correcto
 import CartIcon from '../assets/images/cart-shopping-fast-svgrepo-com.svg';
 import LogeoIcon from '../assets/images/profile-svgrepo-com.svg';
 import LogoHome from '../assets/images/logo-transparent.png';
-
-
 
 const HeaderContainer = styled.header`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color:rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
     width: 100%;
     background-color: #a5cde2;
 `;
 
 const Logo = styled.div`
-    display: flex;  
+    display: flex;
 
-    img{
+    img {
         width: 125px;
         height: 100px;
-
     }
-
-    `;
-
-
+`;
 
 const SecondaryNav = styled.nav`
     ul {
@@ -40,7 +34,7 @@ const SecondaryNav = styled.nav`
     }
 
     a {
-        color:rgb(79, 79, 79);
+        color: rgb(79, 79, 79);
         text-decoration: none;
         font-weight: bold;
     }
@@ -75,20 +69,20 @@ const InputBuscarContainer = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    margin-left: auto; /* Mueve el input más a la derecha */
+    margin-left: auto;
 `;
 
 const Input = styled.input`
     width: 200px;
-    padding: 10px 40px 10px 20px; /* Espacio para el ícono */
+    padding: 10px 40px 10px 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
 `;
 
 const IconWrapper = styled.div`
     position: absolute;
-    right: 10px; /* Posiciona el ícono hacia la derecha */
-    pointer-events: none; /* Evita que el ícono interfiera con el clic en el input */
+    right: 10px;
+    pointer-events: none;
 `;
 
 const CartButton = styled.button`
@@ -103,7 +97,6 @@ const CartButton = styled.button`
     }
 `;
 
-
 const LogeoButton = styled.button`
     background: none;
     border: none;
@@ -111,7 +104,7 @@ const LogeoButton = styled.button`
     position: relative;
 
     img {
-        width: 24px;    
+        width: 24px;
         height: 24px;
     }
 `;
@@ -123,13 +116,14 @@ const CartDropdown = styled.div`
     width: 300px;
     background-color: white;
     border: 1px solid #ccc;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 `;
 
 const Header = () => {
     const [cartVisible, setCartVisible] = useState(false);
-    const cart = useSelector(state => state.cart);
+    // Asegúrate de que el estado `cart` sea un array
+    const cart = useSelector(state => Array.isArray(state.cart) ? state.cart : []);
     const dispatch = useDispatch();
 
     const toggleCartVisibility = () => {
@@ -151,10 +145,10 @@ const Header = () => {
 
             <SecondaryNav>
                 <ul>
-                    <li><Link to="/alimentos">Alimentos</Link></li>
-                    <li><Link to="">Premios</Link></li>
-                    <li><Link to="">Accesosios</Link></li>
-                    <li><Link to="">Ofertas</Link></li>
+                    <li><Link to="/alimentos">Accesosrios</Link></li>
+                    <li><Link to="">Ropa</Link></li>
+                    <li><Link to="">Calzado</Link></li>
+                    <li><Link to="">Tecnología</Link></li>
                 </ul>
             </SecondaryNav>
 
@@ -173,12 +167,16 @@ const Header = () => {
                                 <CartDropdown>
                                     <h2>Carrito Compras</h2>
                                     <ul>
-                                        {cart.map(product => (
-                                            <li key={product.id}>
-                                                {product.name} - ${product.price}
-                                                <button onClick={(event) => removeItemFromCart(product.id, event)}>Eliminar</button>
-                                            </li>
-                                        ))}
+                                        {cart.length > 0 ? (
+                                            cart.map(product => (
+                                                <li key={product.id}>
+                                                    {product.name} - ${product.price}
+                                                    <button onClick={(event) => removeItemFromCart(product.id, event)}>Eliminar</button>
+                                                </li>
+                                            ))
+                                        ) : (
+                                            <p>El carrito está vacío.</p>
+                                        )}
                                     </ul>
                                 </CartDropdown>
                             )}

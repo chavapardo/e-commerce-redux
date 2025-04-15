@@ -2,22 +2,19 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const cartSlice = createSlice({
   name: 'cart',
-  initialState: {
-    items: [], // Lista de productos en el carrito
-  },
+  initialState: [], // Estado inicial como un array vacío
   reducers: {
     addToCart: (state, action) => {
-      state.items.push(action.payload); // Agrega un producto al carrito
+      state.push(action.payload); // Agregar producto al carrito
     },
     removeFromCart: (state, action) => {
-      state.items = state.items.filter((item) => item.id !== action.payload); // Elimina un producto del carrito
+      return state.filter(item => item.id !== action.payload); // Eliminar producto por ID
     },
-    clearCart: (state) => {
-      state.items = []; // Limpia el carrito
+    clearCart: () => {
+      return []; // Vaciar el carrito
     },
   },
 });
 
 export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
-
 export default cartSlice.reducer;

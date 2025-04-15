@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import PromoImagePublic from '../assets/images/banner-1-1.png';
+import PromoImagePublic from '../assets/images/Banner horizontal tienda ropa Moda colorida.jpg';
 
 const HomeContainer = styled.div`
     display: flex;

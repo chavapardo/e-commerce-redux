@@ -8,7 +8,7 @@ import ProductsList from './components/ProductsList'; // Importa el componente P
 import Cart from './components/Cart'; // Importa el componente Cart
 import './App.css';
 import { Provider } from 'react-redux';
-import store from './redux/store';
+import store from './app/store';
 
 const App = () => {
   return (
